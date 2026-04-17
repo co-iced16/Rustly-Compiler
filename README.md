@@ -42,6 +42,18 @@
 - ✅ 5.3 loop 循环（无限循环）
 - ✅ 5.4 break 和 continue 语句
 - ✅ 6.1 变量不可变属性（允许省略 `mut`）
+- ✅ 6.2 不可变引用类型（`&T`）
+- ✅ 6.3 可变引用类型（`&mut T`）
+- ✅ 6.4 解引用操作（`*expr`）
+- ✅ 8.1 数组类型（`[T; N]`）
+- ✅ 8.2 数组字面量（`[expr, expr, ...]`）
+- ✅ 8.3 数组索引（`arr[index]`）
+
+### 功能统计
+
+- **必做功能**: 19/19 ✅
+- **选做功能**: 12/12 ✅
+- **总计**: 31 条语法规则
 
 ### 词法分析器特性
 
@@ -81,6 +93,8 @@ Rustly-Compiler/
 │   ├── test_for_loop.txt      # for 循环测试
 │   ├── test_loop.txt          # loop/break/continue 测试
 │   ├── test_else_if.txt       # else if 测试
+│   ├── test_reference.txt     # 引用和解引用测试
+│   ├── test_array.txt         # 数组测试
 │   └── test_comprehensive.txt # 综合功能测试
 ├── Makefile             # 构建文件
 └── README.md            # 项目说明
