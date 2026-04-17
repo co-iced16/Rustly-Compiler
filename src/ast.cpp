@@ -11,21 +11,21 @@ static void printIndent(int indent) {
 
 // ============ 类型 ============
 
-void I32Type::print(int indent) const {
+void I32Type::print([[maybe_unused]] int indent) const {
     std::cout << "i32";
 }
 
 // ============ 表达式 ============
 
-void NumberLiteral::print(int indent) const {
+void NumberLiteral::print([[maybe_unused]] int indent) const {
     std::cout << value;
 }
 
-void Identifier::print(int indent) const {
+void Identifier::print([[maybe_unused]] int indent) const {
     std::cout << name;
 }
 
-void BinaryExpr::print(int indent) const {
+void BinaryExpr::print([[maybe_unused]] int indent) const {
     std::cout << "(";
     left->print(0);
     std::cout << " ";
@@ -50,7 +50,7 @@ void BinaryExpr::print(int indent) const {
     std::cout << ")";
 }
 
-void CallExpr::print(int indent) const {
+void CallExpr::print([[maybe_unused]] int indent) const {
     std::cout << function << "(";
     for (size_t i = 0; i < args.size(); ++i) {
         if (i > 0) std::cout << ", ";

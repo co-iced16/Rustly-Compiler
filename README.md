@@ -90,17 +90,20 @@ make
 ### 运行编译器
 
 ```bash
-# 基本用法
+# 基本用法（Windows）
+./rustly-compiler.exe <input-file>
+
+# 基本用法（Linux/macOS）
 ./rustly-compiler <input-file>
 
 # 仅输出记号流
-./rustly-compiler <input-file> --tokens-only
+./rustly-compiler.exe <input-file> --tokens-only
 
 # 输出 AST（默认）
-./rustly-compiler <input-file> --ast
+./rustly-compiler.exe <input-file> --ast
 
 # 详细输出
-./rustly-compiler <input-file> --verbose
+./rustly-compiler.exe <input-file> --verbose
 ```
 
 ### 运行测试
@@ -128,6 +131,10 @@ fn main() {
 
 运行：
 ```bash
+# Windows
+./rustly-compiler.exe tests/test_basic.txt
+
+# Linux/macOS
 ./rustly-compiler tests/test_basic.txt
 ```
 
