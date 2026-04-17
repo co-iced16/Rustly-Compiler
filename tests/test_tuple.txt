@@ -1,0 +1,27 @@
+// 测试 9.1, 9.2, 9.3 元组类型、字面量和索引
+fn swap(pair: (i32, i32)) -> (i32, i32) {
+    let a: i32 = pair.0;
+    let b: i32 = pair.1;
+
+    return (b, a);
+}
+
+fn main() -> i32 {
+    // 9.1 元组类型声明
+    let point: (i32, i32) = (10, 20);
+
+    // 9.2 元组字面量
+    let triple: (i32, i32, i32) = (1, 2, 3);
+
+    // 9.3 元组索引访问
+    let x: i32 = point.0;
+    let y: i32 = point.1;
+
+    let sum: i32 = x + y;
+
+    // 函数调用返回元组
+    let swapped: (i32, i32) = swap(point);
+    let result: i32 = swapped.0 + swapped.1;
+
+    return result;
+}

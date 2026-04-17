@@ -56,6 +56,16 @@ public:
     void print(int indent = 0) const override;
 };
 
+// 9.1 元组类型
+class TupleType : public Type {
+public:
+    std::vector<std::unique_ptr<Type>> elementTypes;
+
+    explicit TupleType(std::vector<std::unique_ptr<Type>> types)
+        : elementTypes(std::move(types)) {}
+    void print(int indent = 0) const override;
+};
+
 // ============ 表达式 ============
 
 class Expression : public ASTNode {
@@ -130,6 +140,27 @@ public:
 
     IndexExpr(std::unique_ptr<Expression> arr, std::unique_ptr<Expression> idx)
         : array(std::move(arr)), index(std::move(idx)) {}
+    void print(int indent = 0) const override;
+};
+
+// 9.2 元组字面量
+class TupleLiteral : public Expression {
+public:
+    std::vector<std::unique_ptr<Expression>> elements;
+
+    explicit TupleLiteral(std::vector<std::unique_ptr<Expression>> elems)
+        : elements(std::move(elems)) {}
+    void print(int indent = 0) const override;
+};
+
+// 9.3 元组索引（成员访问）
+class TupleIndexExpr : public Expression {
+public:
+    std::unique_ptr<Expression> tuple;
+    int index;
+
+    TupleIndexExpr(std::unique_ptr<Expression> tup, int idx)
+        : tuple(std::move(tup)), index(idx) {}
     void print(int indent = 0) const override;
 };
 

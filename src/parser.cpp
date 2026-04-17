@@ -154,11 +154,31 @@ std::unique_ptr<Type> Parser::parseType() {
         return std::make_unique<ArrayType>(std::move(elementType), size);
     }
 
+    // 9.1 元组类型 (T1, T2, ...)
+    if (match(TokenType::LPAREN)) {
+        std::vector<std::unique_ptr<Type>> types;
+
+        if (!check(TokenType::RPAREN)) {
+            do {
+                types.push_back(parseType());
+            } while (match(TokenType::COMMA));
+        }
+
+        consume(TokenType::RPAREN, "Expected ')' after tuple type");
+
+        // 空元组或单元素需要至少 2 个元素才是元组
+        if (types.size() < 2) {
+            error("Tuple type must have at least 2 elements");
+        }
+
+        return std::make_unique<TupleType>(std::move(types));
+    }
+
     if (match(TokenType::KW_I32)) {
         return std::make_unique<I32Type>();
     }
 
-    error("Expected type (i32, reference type, or array type)");
+    error("Expected type (i32, reference type, array type, or tuple type)");
     return nullptr;
 }
 
@@ -421,15 +441,26 @@ std::unique_ptr<Expression> Parser::parseTerm() {
     return left;
 }
 
-// 后缀表达式（数组索引）
+// 后缀表达式（数组索引、元组索引）
 std::unique_ptr<Expression> Parser::parsePostfix() {
     auto expr = parseFactor();
 
-    // 8.3 数组索引
-    while (match(TokenType::LBRACKET)) {
-        auto index = parseExpression();
-        consume(TokenType::RBRACKET, "Expected ']' after array index");
-        expr = std::make_unique<IndexExpr>(std::move(expr), std::move(index));
+    while (true) {
+        // 8.3 数组索引
+        if (match(TokenType::LBRACKET)) {
+            auto index = parseExpression();
+            consume(TokenType::RBRACKET, "Expected ']' after array index");
+            expr = std::make_unique<IndexExpr>(std::move(expr), std::move(index));
+        }
+        // 9.3 元组索引 .0, .1, .2, ...
+        else if (match(TokenType::DOT)) {
+            Token indexToken = consume(TokenType::NUMBER, "Expected number after '.' for tuple index");
+            int index = std::stoi(indexToken.lexeme);
+            expr = std::make_unique<TupleIndexExpr>(std::move(expr), index);
+        }
+        else {
+            break;
+        }
     }
 
     return expr;
@@ -499,11 +530,35 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
         return std::make_unique<Identifier>(name);
     }
 
-    // 括号表达式
+    // 括号表达式或元组字面量
     if (match(TokenType::LPAREN)) {
-        auto expr = parseExpression();
+        // 空元组 ()
+        if (check(TokenType::RPAREN)) {
+            advance();
+            return std::make_unique<TupleLiteral>(std::vector<std::unique_ptr<Expression>>());
+        }
+
+        auto first = parseExpression();
+
+        // 如果有逗号，则是元组
+        if (match(TokenType::COMMA)) {
+            std::vector<std::unique_ptr<Expression>> elements;
+            elements.push_back(std::move(first));
+
+            // 继续解析剩余元素
+            if (!check(TokenType::RPAREN)) {
+                do {
+                    elements.push_back(parseExpression());
+                } while (match(TokenType::COMMA));
+            }
+
+            consume(TokenType::RPAREN, "Expected ')' after tuple elements");
+            return std::make_unique<TupleLiteral>(std::move(elements));
+        }
+
+        // 否则是括号表达式
         consume(TokenType::RPAREN, "Expected ')' after expression");
-        return expr;
+        return first;
     }
 
     error("Expected expression");

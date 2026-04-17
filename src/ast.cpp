@@ -27,6 +27,15 @@ void ArrayType::print([[maybe_unused]] int indent) const {
     std::cout << "; " << size << "]";
 }
 
+void TupleType::print([[maybe_unused]] int indent) const {
+    std::cout << "(";
+    for (size_t i = 0; i < elementTypes.size(); ++i) {
+        if (i > 0) std::cout << ", ";
+        elementTypes[i]->print(0);
+    }
+    std::cout << ")";
+}
+
 // ============ 表达式 ============
 
 void NumberLiteral::print([[maybe_unused]] int indent) const {
@@ -95,6 +104,20 @@ void IndexExpr::print([[maybe_unused]] int indent) const {
     std::cout << "[";
     index->print(0);
     std::cout << "]";
+}
+
+void TupleLiteral::print([[maybe_unused]] int indent) const {
+    std::cout << "(";
+    for (size_t i = 0; i < elements.size(); ++i) {
+        if (i > 0) std::cout << ", ";
+        elements[i]->print(0);
+    }
+    std::cout << ")";
+}
+
+void TupleIndexExpr::print([[maybe_unused]] int indent) const {
+    tuple->print(0);
+    std::cout << "." << index;
 }
 
 // ============ 语句 ============
