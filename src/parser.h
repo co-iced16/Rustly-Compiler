@@ -66,6 +66,12 @@ private:
     // 5.1 循环结构
     std::unique_ptr<WhileStmt> parseWhileStmt();
 
+    // 5.2 for 循环
+    std::unique_ptr<ForStmt> parseForStmt();
+
+    // 5.3 loop 循环
+    std::unique_ptr<LoopStmt> parseLoopStmt();
+
     // 3.1-3.5 表达式
     std::unique_ptr<Expression> parseExpression();        // 比较表达式
     std::unique_ptr<Expression> parseAddSubExpr();        // 加减表达式

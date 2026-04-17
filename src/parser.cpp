@@ -196,6 +196,28 @@ std::unique_ptr<Statement> Parser::parseStatement() {
         return parseWhileStmt();
     }
 
+    // 5.2 for 循环
+    if (check(TokenType::KW_FOR)) {
+        return parseForStmt();
+    }
+
+    // 5.3 loop 循环
+    if (check(TokenType::KW_LOOP)) {
+        return parseLoopStmt();
+    }
+
+    // 5.4 break 语句
+    if (match(TokenType::KW_BREAK)) {
+        consume(TokenType::SEMICOLON, "Expected ';' after 'break'");
+        return std::make_unique<BreakStmt>();
+    }
+
+    // 5.4 continue 语句
+    if (match(TokenType::KW_CONTINUE)) {
+        consume(TokenType::SEMICOLON, "Expected ';' after 'continue'");
+        return std::make_unique<ContinueStmt>();
+    }
+
     // 2.2 赋值语句或表达式语句
     if (check(TokenType::IDENTIFIER)) {
         Token nameToken = advance();
@@ -279,7 +301,16 @@ std::unique_ptr<IfStmt> Parser::parseIfStmt() {
 
     std::unique_ptr<Block> elseBlock = nullptr;
     if (match(TokenType::KW_ELSE)) {
-        elseBlock = parseBlock();
+        // 4.3 else if 支持
+        if (check(TokenType::KW_IF)) {
+            // else if 转换为嵌套的 if 语句
+            auto nestedIf = parseIfStmt();
+            elseBlock = std::make_unique<Block>();
+            elseBlock->statements.push_back(std::move(nestedIf));
+        } else {
+            // 4.2 普通 else
+            elseBlock = parseBlock();
+        }
     }
 
     return std::make_unique<IfStmt>(std::move(condition), std::move(thenBlock),
@@ -295,6 +326,39 @@ std::unique_ptr<WhileStmt> Parser::parseWhileStmt() {
     auto body = parseBlock();
 
     return std::make_unique<WhileStmt>(std::move(condition), std::move(body));
+}
+
+// ============ 5.2 for 循环 ============
+
+std::unique_ptr<ForStmt> Parser::parseForStmt() {
+    consume(TokenType::KW_FOR, "Expected 'for'");
+
+    // 解析变量声明：[mut] identifier
+    bool isMut = match(TokenType::KW_MUT);
+    Token varToken = consume(TokenType::IDENTIFIER, "Expected variable name in for loop");
+    std::string varName = varToken.lexeme;
+
+    consume(TokenType::KW_IN, "Expected 'in' after loop variable");
+
+    // 解析范围：start..end
+    auto start = parseExpression();
+    consume(TokenType::DOTDOT, "Expected '..' in range expression");
+    auto end = parseExpression();
+
+    auto body = parseBlock();
+
+    return std::make_unique<ForStmt>(isMut, varName, std::move(start),
+                                     std::move(end), std::move(body));
+}
+
+// ============ 5.3 loop 循环 ============
+
+std::unique_ptr<LoopStmt> Parser::parseLoopStmt() {
+    consume(TokenType::KW_LOOP, "Expected 'loop'");
+
+    auto body = parseBlock();
+
+    return std::make_unique<LoopStmt>(std::move(body));
 }
 
 // ============ 3.1-3.5 表达式 ============

@@ -34,6 +34,15 @@
 - ✅ 5.0 循环语句
 - ✅ 5.1 while 循环
 
+### 已实现的选做功能
+
+- ✅ 4.2 else 分支
+- ✅ 4.3 else if 语句
+- ✅ 5.2 for 循环（`for var in start..end`）
+- ✅ 5.3 loop 循环（无限循环）
+- ✅ 5.4 break 和 continue 语句
+- ✅ 6.1 变量不可变属性（允许省略 `mut`）
+
 ### 词法分析器特性
 
 - 识别所有关键字（15 个）
@@ -65,10 +74,14 @@ Rustly-Compiler/
 │   ├── parser.cpp       # 语法分析器实现
 │   └── main.cpp         # 主程序
 ├── tests/
-│   ├── test_basic.txt   # 基础测试
-│   ├── test_expr.txt    # 表达式测试
-│   ├── test_func.txt    # 函数调用测试
-│   └── test_control.txt # 控制流测试
+│   ├── test_basic.txt         # 基础测试
+│   ├── test_expr.txt          # 表达式测试
+│   ├── test_func.txt          # 函数调用测试
+│   ├── test_control.txt       # 控制流测试
+│   ├── test_for_loop.txt      # for 循环测试
+│   ├── test_loop.txt          # loop/break/continue 测试
+│   ├── test_else_if.txt       # else if 测试
+│   └── test_comprehensive.txt # 综合功能测试
 ├── Makefile             # 构建文件
 └── README.md            # 项目说明
 ```

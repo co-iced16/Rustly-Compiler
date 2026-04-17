@@ -1,0 +1,16 @@
+// 测试 5.2 for 循环
+fn main() -> i32 {
+    let mut sum: i32 = 0;
+
+    // for 循环测试
+    for i in 0..10 {
+        sum = sum + i;
+    }
+
+    // 带 mut 的 for 循环
+    for mut j in 1..5 {
+        j = j + 1;
+    }
+
+    return sum;
+}

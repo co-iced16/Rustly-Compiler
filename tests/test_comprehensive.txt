@@ -1,0 +1,48 @@
+// 综合测试：测试所有新功能
+fn calculate(mut x: i32, y: i32) -> i32 {
+    // 6.1 测试：参数可以省略 mut（y 没有 mut）
+    let result: i32 = 0;
+
+    // 5.2 for 循环
+    for i in 0..5 {
+        result = result + i;
+    }
+
+    return result + x + y;
+}
+
+fn main() -> i32 {
+    // 6.1 测试：变量可以省略 mut
+    let immutable: i32 = 10;
+    let mut mutable: i32 = 20;
+
+    // 4.3 else if 测试
+    if immutable == 5 {
+        mutable = 100;
+    } else if immutable == 10 {
+        mutable = 200;
+    } else {
+        mutable = 300;
+    }
+
+    // 5.3 loop 和 5.4 break/continue 测试
+    let mut counter: i32 = 0;
+    loop {
+        counter = counter + 1;
+
+        if counter == 3 {
+            continue;
+        }
+
+        if counter == 7 {
+            break;
+        }
+    }
+
+    // 5.2 for 循环测试
+    for j in 1..4 {
+        mutable = mutable + j;
+    }
+
+    return calculate(mutable, counter);
+}

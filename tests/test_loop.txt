@@ -1,0 +1,21 @@
+// 测试 5.3 loop 循环和 5.4 break/continue
+fn main() -> i32 {
+    let mut count: i32 = 0;
+
+    // loop 循环测试
+    loop {
+        count = count + 1;
+
+        // continue 测试
+        if count == 5 {
+            continue;
+        }
+
+        // break 测试
+        if count == 10 {
+            break;
+        }
+    }
+
+    return count;
+}

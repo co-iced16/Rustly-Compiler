@@ -140,6 +140,34 @@ void WhileStmt::print(int indent) const {
     body->print(indent);
 }
 
+void ForStmt::print(int indent) const {
+    printIndent(indent);
+    std::cout << "for ";
+    if (isMut) std::cout << "mut ";
+    std::cout << varName << " in ";
+    start->print(0);
+    std::cout << "..";
+    end->print(0);
+    std::cout << " ";
+    body->print(indent);
+}
+
+void LoopStmt::print(int indent) const {
+    printIndent(indent);
+    std::cout << "loop ";
+    body->print(indent);
+}
+
+void BreakStmt::print(int indent) const {
+    printIndent(indent);
+    std::cout << "break;";
+}
+
+void ContinueStmt::print(int indent) const {
+    printIndent(indent);
+    std::cout << "continue;";
+}
+
 // ============ 声明 ============
 
 void FunctionDecl::print(int indent) const {

@@ -162,6 +162,45 @@ public:
     void print(int indent = 0) const override;
 };
 
+// 5.2 for 循环
+class ForStmt : public Statement {
+public:
+    bool isMut;
+    std::string varName;
+    std::unique_ptr<Expression> start;
+    std::unique_ptr<Expression> end;
+    std::unique_ptr<Block> body;
+
+    ForStmt(bool mut, const std::string& var,
+            std::unique_ptr<Expression> s,
+            std::unique_ptr<Expression> e,
+            std::unique_ptr<Block> b)
+        : isMut(mut), varName(var), start(std::move(s)),
+          end(std::move(e)), body(std::move(b)) {}
+    void print(int indent = 0) const override;
+};
+
+// 5.3 loop 循环
+class LoopStmt : public Statement {
+public:
+    std::unique_ptr<Block> body;
+
+    explicit LoopStmt(std::unique_ptr<Block> b) : body(std::move(b)) {}
+    void print(int indent = 0) const override;
+};
+
+// 5.4 break 语句
+class BreakStmt : public Statement {
+public:
+    void print(int indent = 0) const override;
+};
+
+// 5.4 continue 语句
+class ContinueStmt : public Statement {
+public:
+    void print(int indent = 0) const override;
+};
+
 // ============ 声明 ============
 
 class Declaration : public ASTNode {
