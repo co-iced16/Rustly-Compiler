@@ -1,0 +1,53 @@
+# Build output (Makefile)
+build/
+rustly-compiler
+rustly-compiler.exe
+
+# Compiled objects / libs
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exp
+*.pdb
+*.ilk
+
+# Precompiled headers / dependency files
+*.gch
+*.d
+
+# CMake (if added later)
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile.cmake
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+out/
+cmake-build-*/
+
+# Debug / profiling
+*.dSYM/
+core
+core.*
+vgcore.*
+*.stackdump
+
+# Editors & IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local tool / agent config (machine-specific)
+.claude/settings.local.json
