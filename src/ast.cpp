@@ -21,6 +21,12 @@ void RefType::print([[maybe_unused]] int indent) const {
     innerType->print(0);
 }
 
+void ArrayType::print([[maybe_unused]] int indent) const {
+    std::cout << "[";
+    elementType->print(0);
+    std::cout << "; " << size << "]";
+}
+
 // ============ 表达式 ============
 
 void NumberLiteral::print([[maybe_unused]] int indent) const {
@@ -73,6 +79,22 @@ void UnaryExpr::print([[maybe_unused]] int indent) const {
         std::cout << "*";
     }
     operand->print(0);
+}
+
+void ArrayLiteral::print([[maybe_unused]] int indent) const {
+    std::cout << "[";
+    for (size_t i = 0; i < elements.size(); ++i) {
+        if (i > 0) std::cout << ", ";
+        elements[i]->print(0);
+    }
+    std::cout << "]";
+}
+
+void IndexExpr::print([[maybe_unused]] int indent) const {
+    array->print(0);
+    std::cout << "[";
+    index->print(0);
+    std::cout << "]";
 }
 
 // ============ 语句 ============

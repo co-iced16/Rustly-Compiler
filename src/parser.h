@@ -76,6 +76,7 @@ private:
     std::unique_ptr<Expression> parseExpression();        // 比较表达式
     std::unique_ptr<Expression> parseAddSubExpr();        // 加减表达式
     std::unique_ptr<Expression> parseTerm();              // 乘除表达式
+    std::unique_ptr<Expression> parsePostfix();           // 后缀表达式（数组索引）
     std::unique_ptr<Expression> parseFactor();            // 因子
     std::unique_ptr<Expression> parsePrimary();           // 基本表达式
 };

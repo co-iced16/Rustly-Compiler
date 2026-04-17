@@ -45,6 +45,17 @@ public:
     void print(int indent = 0) const override;
 };
 
+// 8.1 数组类型
+class ArrayType : public Type {
+public:
+    std::unique_ptr<Type> elementType;
+    int size;
+
+    ArrayType(std::unique_ptr<Type> elemType, int sz)
+        : elementType(std::move(elemType)), size(sz) {}
+    void print(int indent = 0) const override;
+};
+
 // ============ 表达式 ============
 
 class Expression : public ASTNode {
@@ -98,6 +109,27 @@ public:
 
     UnaryExpr(TokenType o, std::unique_ptr<Expression> expr, bool mut = false)
         : op(o), isMut(mut), operand(std::move(expr)) {}
+    void print(int indent = 0) const override;
+};
+
+// 8.2 数组字面量
+class ArrayLiteral : public Expression {
+public:
+    std::vector<std::unique_ptr<Expression>> elements;
+
+    explicit ArrayLiteral(std::vector<std::unique_ptr<Expression>> elems)
+        : elements(std::move(elems)) {}
+    void print(int indent = 0) const override;
+};
+
+// 8.3 数组索引
+class IndexExpr : public Expression {
+public:
+    std::unique_ptr<Expression> array;
+    std::unique_ptr<Expression> index;
+
+    IndexExpr(std::unique_ptr<Expression> arr, std::unique_ptr<Expression> idx)
+        : array(std::move(arr)), index(std::move(idx)) {}
     void print(int indent = 0) const override;
 };
 

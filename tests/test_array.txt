@@ -1,0 +1,25 @@
+// 测试 8.1, 8.2, 8.3 数组类型、字面量和索引
+fn sum_array(arr: &[i32; 5]) -> i32 {
+    let result: i32 = 0;
+
+    // 数组索引访问
+    result = *arr[0] + *arr[1] + *arr[2] + *arr[3] + *arr[4];
+
+    return result;
+}
+
+fn main() -> i32 {
+    // 8.1 数组类型声明
+    let numbers: [i32; 5] = [1, 2, 3, 4, 5];
+
+    // 8.2 数组字面量
+    let values: [i32; 3] = [10, 20, 30];
+
+    // 8.3 数组索引
+    let first: i32 = numbers[0];
+    let second: i32 = values[1];
+
+    let sum: i32 = first + second;
+
+    return sum_array(&numbers);
+}

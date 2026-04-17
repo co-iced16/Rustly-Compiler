@@ -144,11 +144,21 @@ std::unique_ptr<Type> Parser::parseType() {
         return std::make_unique<RefType>(isMut, std::move(innerType));
     }
 
+    // 8.1 数组类型 [T; N]
+    if (match(TokenType::LBRACKET)) {
+        auto elementType = parseType();
+        consume(TokenType::SEMICOLON, "Expected ';' in array type");
+        Token sizeToken = consume(TokenType::NUMBER, "Expected array size");
+        int size = std::stoi(sizeToken.lexeme);
+        consume(TokenType::RBRACKET, "Expected ']' after array type");
+        return std::make_unique<ArrayType>(std::move(elementType), size);
+    }
+
     if (match(TokenType::KW_I32)) {
         return std::make_unique<I32Type>();
     }
 
-    error("Expected type (i32 or reference type)");
+    error("Expected type (i32, reference type, or array type)");
     return nullptr;
 }
 
@@ -400,15 +410,29 @@ std::unique_ptr<Expression> Parser::parseAddSubExpr() {
 
 // 3.4 乘除表达式
 std::unique_ptr<Expression> Parser::parseTerm() {
-    auto left = parseFactor();
+    auto left = parsePostfix();
 
     while (check(TokenType::STAR) || check(TokenType::SLASH)) {
         TokenType op = advance().type;
-        auto right = parseFactor();
+        auto right = parsePostfix();
         left = std::make_unique<BinaryExpr>(std::move(left), op, std::move(right));
     }
 
     return left;
+}
+
+// 后缀表达式（数组索引）
+std::unique_ptr<Expression> Parser::parsePostfix() {
+    auto expr = parseFactor();
+
+    // 8.3 数组索引
+    while (match(TokenType::LBRACKET)) {
+        auto index = parseExpression();
+        consume(TokenType::RBRACKET, "Expected ']' after array index");
+        expr = std::make_unique<IndexExpr>(std::move(expr), std::move(index));
+    }
+
+    return expr;
 }
 
 // 3.1 因子
@@ -429,6 +453,20 @@ std::unique_ptr<Expression> Parser::parsePrimary() {
         bool isMut = match(TokenType::KW_MUT);
         auto operand = parsePrimary();
         return std::make_unique<UnaryExpr>(TokenType::AMPERSAND, std::move(operand), isMut);
+    }
+
+    // 8.2 数组字面量 [expr, expr, ...]
+    if (match(TokenType::LBRACKET)) {
+        std::vector<std::unique_ptr<Expression>> elements;
+
+        if (!check(TokenType::RBRACKET)) {
+            do {
+                elements.push_back(parseExpression());
+            } while (match(TokenType::COMMA));
+        }
+
+        consume(TokenType::RBRACKET, "Expected ']' after array elements");
+        return std::make_unique<ArrayLiteral>(std::move(elements));
     }
 
     // 数字字面量
