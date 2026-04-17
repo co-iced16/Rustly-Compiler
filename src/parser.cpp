@@ -137,11 +137,18 @@ std::unique_ptr<Type> Parser::parseReturnType() {
 }
 
 std::unique_ptr<Type> Parser::parseType() {
+    // 6.2, 6.3 引用类型
+    if (match(TokenType::AMPERSAND)) {
+        bool isMut = match(TokenType::KW_MUT);
+        auto innerType = parseType();
+        return std::make_unique<RefType>(isMut, std::move(innerType));
+    }
+
     if (match(TokenType::KW_I32)) {
         return std::make_unique<I32Type>();
     }
 
-    error("Expected type (i32)");
+    error("Expected type (i32 or reference type)");
     return nullptr;
 }
 
@@ -411,6 +418,19 @@ std::unique_ptr<Expression> Parser::parseFactor() {
 
 // 3.1, 3.5 基本表达式
 std::unique_ptr<Expression> Parser::parsePrimary() {
+    // 6.4 解引用 *expr
+    if (match(TokenType::STAR)) {
+        auto operand = parsePrimary();
+        return std::make_unique<UnaryExpr>(TokenType::STAR, std::move(operand));
+    }
+
+    // 6.2, 6.3 取引用 &expr 或 &mut expr
+    if (match(TokenType::AMPERSAND)) {
+        bool isMut = match(TokenType::KW_MUT);
+        auto operand = parsePrimary();
+        return std::make_unique<UnaryExpr>(TokenType::AMPERSAND, std::move(operand), isMut);
+    }
+
     // 数字字面量
     if (check(TokenType::NUMBER)) {
         Token token = advance();

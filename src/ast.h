@@ -34,6 +34,17 @@ public:
     void print(int indent = 0) const override;
 };
 
+// 6.2, 6.3 引用类型
+class RefType : public Type {
+public:
+    bool isMut;  // true 表示 &mut T, false 表示 &T
+    std::unique_ptr<Type> innerType;
+
+    RefType(bool mut, std::unique_ptr<Type> inner)
+        : isMut(mut), innerType(std::move(inner)) {}
+    void print(int indent = 0) const override;
+};
+
 // ============ 表达式 ============
 
 class Expression : public ASTNode {
@@ -75,6 +86,18 @@ public:
 
     CallExpr(const std::string& func, std::vector<std::unique_ptr<Expression>> arguments)
         : function(func), args(std::move(arguments)) {}
+    void print(int indent = 0) const override;
+};
+
+// 一元表达式（取引用、解引用）
+class UnaryExpr : public Expression {
+public:
+    TokenType op;  // AMPERSAND (&) 或 STAR (*)
+    bool isMut;    // 仅用于 & 运算符，表示 &mut
+    std::unique_ptr<Expression> operand;
+
+    UnaryExpr(TokenType o, std::unique_ptr<Expression> expr, bool mut = false)
+        : op(o), isMut(mut), operand(std::move(expr)) {}
     void print(int indent = 0) const override;
 };
 

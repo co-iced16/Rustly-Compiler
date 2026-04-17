@@ -15,6 +15,12 @@ void I32Type::print([[maybe_unused]] int indent) const {
     std::cout << "i32";
 }
 
+void RefType::print([[maybe_unused]] int indent) const {
+    std::cout << "&";
+    if (isMut) std::cout << "mut ";
+    innerType->print(0);
+}
+
 // ============ 表达式 ============
 
 void NumberLiteral::print([[maybe_unused]] int indent) const {
@@ -57,6 +63,16 @@ void CallExpr::print([[maybe_unused]] int indent) const {
         args[i]->print(0);
     }
     std::cout << ")";
+}
+
+void UnaryExpr::print([[maybe_unused]] int indent) const {
+    if (op == TokenType::AMPERSAND) {
+        std::cout << "&";
+        if (isMut) std::cout << "mut ";
+    } else if (op == TokenType::STAR) {
+        std::cout << "*";
+    }
+    operand->print(0);
 }
 
 // ============ 语句 ============

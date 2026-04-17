@@ -1,0 +1,22 @@
+// 测试 6.2, 6.3, 6.4 引用类型和解引用
+fn test_ref(x: &i32, y: &mut i32) -> i32 {
+    // 解引用
+    let a: i32 = *x;
+    let b: i32 = *y;
+
+    return a + b;
+}
+
+fn main() -> i32 {
+    let value: i32 = 10;
+    let mut mutable: i32 = 20;
+
+    // 取引用
+    let ref1: &i32 = &value;
+    let ref2: &mut i32 = &mut mutable;
+
+    // 解引用
+    let result: i32 = *ref1 + *ref2;
+
+    return test_ref(&value, &mut mutable);
+}
