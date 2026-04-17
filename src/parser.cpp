@@ -188,7 +188,31 @@ std::unique_ptr<Block> Parser::parseBlock() {
     consume(TokenType::LBRACE, "Expected '{'");
 
     auto block = std::make_unique<Block>();
-    block->statements = parseStatements();
+
+    // 解析语句和可能的块尾表达式
+    while (!check(TokenType::RBRACE) && !isAtEnd()) {
+        // 尝试解析表达式（可能是块尾表达式）
+        size_t savedPos = current;
+
+        // 检查是否是块尾表达式（表达式后直接跟 }）
+        try {
+            auto expr = parseExpression();
+
+            // 如果后面是 }，这是块尾表达式
+            if (check(TokenType::RBRACE)) {
+                block->tailExpr = std::move(expr);
+                break;
+            }
+
+            // 否则必须是表达式语句（需要分号）
+            current = savedPos;
+            block->statements.push_back(parseStatement());
+        } catch (...) {
+            // 解析失败，回退并作为语句解析
+            current = savedPos;
+            block->statements.push_back(parseStatement());
+        }
+    }
 
     consume(TokenType::RBRACE, "Expected '}'");
 
@@ -245,8 +269,15 @@ std::unique_ptr<Statement> Parser::parseStatement() {
 
     // 5.4 break 语句
     if (match(TokenType::KW_BREAK)) {
+        std::unique_ptr<Expression> value = nullptr;
+
+        // 7.4 break 可以带表达式
+        if (!check(TokenType::SEMICOLON)) {
+            value = parseExpression();
+        }
+
         consume(TokenType::SEMICOLON, "Expected ';' after 'break'");
-        return std::make_unique<BreakStmt>();
+        return std::make_unique<BreakStmt>(std::move(value));
     }
 
     // 5.4 continue 语句
@@ -473,6 +504,34 @@ std::unique_ptr<Expression> Parser::parseFactor() {
 
 // 3.1, 3.5 基本表达式
 std::unique_ptr<Expression> Parser::parsePrimary() {
+    // 7.1 块表达式
+    if (check(TokenType::LBRACE)) {
+        auto block = parseBlock();
+        return std::make_unique<BlockExpr>(std::move(block));
+    }
+
+    // 7.3 if 表达式（必须有 else）
+    if (check(TokenType::KW_IF)) {
+        advance();
+        auto condition = parseExpression();
+        auto thenBlock = parseBlock();
+
+        // if 表达式必须有 else
+        if (match(TokenType::KW_ELSE)) {
+            auto elseBlock = parseBlock();
+            return std::make_unique<IfExpr>(std::move(condition), std::move(thenBlock), std::move(elseBlock));
+        }
+
+        error("if expression must have else branch");
+    }
+
+    // 7.4 loop 表达式
+    if (check(TokenType::KW_LOOP)) {
+        advance();
+        auto body = parseBlock();
+        return std::make_unique<LoopExpr>(std::move(body));
+    }
+
     // 6.4 解引用 *expr
     if (match(TokenType::STAR)) {
         auto operand = parsePrimary();

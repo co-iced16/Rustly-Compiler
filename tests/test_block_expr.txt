@@ -1,0 +1,39 @@
+// 测试 7.0-7.4 表达式块功能
+fn compute(x: i32) -> i32 {
+    // 7.1 块表达式作为返回值
+    {
+        let y: i32 = x + 10;
+        y * 2
+    }
+}
+
+fn max(a: i32, b: i32) -> i32 {
+    // 7.3 if 表达式
+    if a > b {
+        a
+    } else {
+        b
+    }
+}
+
+fn sum_to_n(n: i32) -> i32 {
+    let result: i32 = 0;
+    let i: i32 = 0;
+
+    // 7.4 loop 表达式和 break 带值
+    loop {
+        if i > n {
+            break result;
+        }
+        result = result + i;
+        i = i + 1;
+    }
+}
+
+fn main() -> i32 {
+    let x: i32 = compute(5);
+    let y: i32 = max(10, 20);
+    let z: i32 = sum_to_n(10);
+
+    return x + y + z;
+}

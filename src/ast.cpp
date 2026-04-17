@@ -120,6 +120,24 @@ void TupleIndexExpr::print([[maybe_unused]] int indent) const {
     std::cout << "." << index;
 }
 
+void BlockExpr::print([[maybe_unused]] int indent) const {
+    block->print(indent);
+}
+
+void IfExpr::print([[maybe_unused]] int indent) const {
+    std::cout << "if ";
+    condition->print(0);
+    std::cout << " ";
+    thenBlock->print(indent);
+    std::cout << " else ";
+    elseBlock->print(indent);
+}
+
+void LoopExpr::print([[maybe_unused]] int indent) const {
+    std::cout << "loop ";
+    body->print(indent);
+}
+
 // ============ 语句 ============
 
 void Block::print(int indent) const {
@@ -127,6 +145,12 @@ void Block::print(int indent) const {
     std::cout << "{\n";
     for (const auto& stmt : statements) {
         stmt->print(indent + 1);
+    }
+    // 7.0 块尾表达式
+    if (tailExpr) {
+        printIndent(indent + 1);
+        tailExpr->print(0);
+        std::cout << "\n";
     }
     printIndent(indent);
     std::cout << "}\n";
@@ -221,7 +245,12 @@ void LoopStmt::print(int indent) const {
 
 void BreakStmt::print(int indent) const {
     printIndent(indent);
-    std::cout << "break;";
+    std::cout << "break";
+    if (value) {
+        std::cout << " ";
+        value->print(0);
+    }
+    std::cout << ";";
 }
 
 void ContinueStmt::print(int indent) const {

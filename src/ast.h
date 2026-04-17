@@ -164,6 +164,41 @@ public:
     void print(int indent = 0) const override;
 };
 
+// 7.1 块表达式
+class BlockExpr : public Expression {
+public:
+    std::unique_ptr<Block> block;
+
+    explicit BlockExpr(std::unique_ptr<Block> blk)
+        : block(std::move(blk)) {}
+    void print(int indent = 0) const override;
+};
+
+// 7.3 if 表达式
+class IfExpr : public Expression {
+public:
+    std::unique_ptr<Expression> condition;
+    std::unique_ptr<Block> thenBlock;
+    std::unique_ptr<Block> elseBlock;  // 必须有 else 分支
+
+    IfExpr(std::unique_ptr<Expression> cond,
+           std::unique_ptr<Block> thenB,
+           std::unique_ptr<Block> elseB)
+        : condition(std::move(cond)), thenBlock(std::move(thenB)),
+          elseBlock(std::move(elseB)) {}
+    void print(int indent = 0) const override;
+};
+
+// 7.4 loop 表达式
+class LoopExpr : public Expression {
+public:
+    std::unique_ptr<Block> body;
+
+    explicit LoopExpr(std::unique_ptr<Block> b)
+        : body(std::move(b)) {}
+    void print(int indent = 0) const override;
+};
+
 // ============ 语句 ============
 
 class Statement : public ASTNode {
@@ -174,6 +209,7 @@ public:
 class Block : public ASTNode {
 public:
     std::vector<std::unique_ptr<Statement>> statements;
+    std::unique_ptr<Expression> tailExpr;  // 7.0 块尾表达式（可选）
 
     void print(int indent = 0) const override;
 };
@@ -278,6 +314,10 @@ public:
 // 5.4 break 语句
 class BreakStmt : public Statement {
 public:
+    std::unique_ptr<Expression> value;  // 7.4 可选的 break 表达式
+
+    explicit BreakStmt(std::unique_ptr<Expression> v = nullptr)
+        : value(std::move(v)) {}
     void print(int indent = 0) const override;
 };
 
