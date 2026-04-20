@@ -1,0 +1,15 @@
+// 测试 1.4 空参数列表（必做规则）
+fn greet() {
+    return;
+}
+
+fn get_number() -> i32 {
+    let val: i32 = 42;
+    return val;
+}
+
+fn main() -> i32 {
+    greet();
+    let n: i32 = get_number();
+    return n;
+}

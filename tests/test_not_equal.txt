@@ -1,0 +1,10 @@
+// 测试 3.2 != 比较运算符（必做规则）
+fn test_not_equal() -> i32 {
+    let x: i32 = 1;
+    let y: i32 = 2;
+    let result: i32 = 0;
+    if x != y {
+        result = 1;
+    }
+    return result;
+}

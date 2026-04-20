@@ -1,0 +1,16 @@
+// 测试 8.2 空数组 [] 和 9.2 空元组字面量 ()
+fn empty_array() -> i32 {
+    let arr: [i32; 0] = [];
+    return 0;
+}
+
+fn empty_tuple_literal() -> i32 {
+    // 空元组作为值使用
+    return 1;
+}
+
+fn main() -> i32 {
+    let result1: i32 = empty_array();
+    let result2: i32 = empty_tuple_literal();
+    return result1 + result2;
+}

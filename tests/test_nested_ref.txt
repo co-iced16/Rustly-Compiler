@@ -1,0 +1,18 @@
+// 测试 6.2/6.3 嵌套引用 &&T 和 &mut &T
+fn nested_ref(a: &&i32) -> i32 {
+    let val: i32 = *a;
+    return val;
+}
+
+fn ref_mut_ref(a: &mut &i32) -> i32 {
+    let val: i32 = *a;
+    return val;
+}
+
+fn main() -> i32 {
+    let x: i32 = 42;
+    let ref1: &i32 = &x;
+    let ref2: &&i32 = &ref1;
+    let result: i32 = nested_ref(ref2);
+    return result;
+}

@@ -1,0 +1,12 @@
+// 测试 7.3 if 选择表达式（作为可取元素）
+fn max(a: i32, b: i32) -> i32 {
+    return if a > b { a } else { b };
+}
+
+fn main() -> i32 {
+    let x: i32 = 10;
+    let y: i32 = 20;
+    let bigger: i32 = if x > y { x } else { y };
+    let result: i32 = max(x, y);
+    return bigger + result;
+}

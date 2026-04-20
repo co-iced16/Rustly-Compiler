@@ -48,5 +48,56 @@ test: $(TARGET)
 	@echo ""
 	@echo "Running test_control.txt..."
 	$(RUN_TARGET) tests/test_control.txt
+	@echo ""
+	@echo "Running test_for_loop.txt..."
+	$(RUN_TARGET) tests/test_for_loop.txt
+	@echo ""
+	@echo "Running test_loop.txt..."
+	$(RUN_TARGET) tests/test_loop.txt
+	@echo ""
+	@echo "Running test_else_if.txt..."
+	$(RUN_TARGET) tests/test_else_if.txt
+	@echo ""
+	@echo "Running test_comprehensive.txt..."
+	$(RUN_TARGET) tests/test_comprehensive.txt
+	@echo ""
+	@echo "Running test_reference.txt..."
+	$(RUN_TARGET) tests/test_reference.txt
+	@echo ""
+	@echo "Running test_array.txt..."
+	$(RUN_TARGET) tests/test_array.txt
+	@echo ""
+	@echo "Running test_tuple.txt..."
+	$(RUN_TARGET) tests/test_tuple.txt
+	@echo ""
+	@echo "Running test_block_expr.txt..."
+	$(RUN_TARGET) tests/test_block_expr.txt
+	@echo ""
+	@echo "Running test_division.txt..."
+	$(RUN_TARGET) tests/test_division.txt
+	@echo ""
+	@echo "Running test_not_equal.txt..."
+	$(RUN_TARGET) tests/test_not_equal.txt
+	@echo ""
+	@echo "Running test_empty_params.txt..."
+	$(RUN_TARGET) tests/test_empty_params.txt
+	@echo ""
+	@echo "Running test_comments.txt..."
+	$(RUN_TARGET) tests/test_comments.txt
+	@echo ""
+	@echo "Running test_identifiers.txt..."
+	$(RUN_TARGET) tests/test_identifiers.txt
+	@echo ""
+	@echo "Running test_nested_ref.txt..."
+	$(RUN_TARGET) tests/test_nested_ref.txt
+	@echo ""
+	@echo "Running test_if_expr.txt..."
+	$(RUN_TARGET) tests/test_if_expr.txt
+	@echo ""
+	@echo "Running test_break_with_value.txt..."
+	$(RUN_TARGET) tests/test_break_with_value.txt
+	@echo ""
+	@echo "Running test_empty_collections.txt..."
+	$(RUN_TARGET) tests/test_empty_collections.txt
 
 .PHONY: all clean test

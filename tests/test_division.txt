@@ -1,0 +1,9 @@
+// 测试 3.3 减法和 3.4 除法运算（必做规则）
+fn compute() -> i32 {
+    let a: i32 = 100;
+    let b: i32 = 5;
+    let diff: i32 = a - b;
+    let quot: i32 = a / b;
+    let combined: i32 = (a - b) / (a / 10);
+    return combined;
+}

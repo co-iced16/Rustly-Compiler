@@ -1,0 +1,15 @@
+// 测试词法识别规则：if123 应识别为标识符（作业要求）
+fn test_keywords_as_prefix() -> i32 {
+    // if123 是标识符，不是关键字 if
+    let if123: i32 = 100;
+    // 类似的边界情况
+    let letvar: i32 = 200;
+    let whileloop: i32 = 300;
+    let fn_name: i32 = if123 + letvar - whileloop;
+    return fn_name;
+}
+
+fn main() -> i32 {
+    let result: i32 = test_keywords_as_prefix();
+    return result;
+}

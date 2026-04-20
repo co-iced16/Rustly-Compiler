@@ -1,0 +1,20 @@
+// 测试 7.4 break 带表达式值
+fn find() -> i32 {
+    let i: i32 = 0;
+    loop {
+        if i > 5 {
+            break i;
+        }
+        i = i + 1;
+    }
+}
+
+fn main() -> i32 {
+    let mut count: i32 = 0;
+    loop {
+        count = count + 1;
+        if count >= 10 {
+            break count;
+        }
+    }
+}
